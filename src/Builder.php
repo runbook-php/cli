@@ -173,7 +173,7 @@ class Builder
         $step->setResult($output);
         $this->tagParse->addReference('steps.'.$step->getId().'.rc', $output->getExitCode());
 
-        if ($output->getExitCode() === OutputContract::FAILURE) {
+        if ($output->getExitCode() === OutputContract::FAILURE || $output->getExitCode() === OutputContract::SKIPPED) {
             return;
         }
 
