@@ -1,0 +1,4 @@
+*.yml
+.vscode/
+vendor/
+composer.lock

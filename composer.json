@@ -1,0 +1,32 @@
+{
+    "name": "wsw/runbook",
+    "description": "Um interpretador de runbooks escrito em PHP para automação de respostas operacionais em linha de comando.",
+    "type": "project",
+    "bin": [
+        "bin/runbook"
+    ],
+    "require": {
+        "symfony/yaml": "^5.4",
+        "wsw/runbook-contract": "^1.0",
+        "wsw/runbook-tagget-parses": "^1.0",
+        "psr/log": "^1.1"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Wsw\\Runbook\\": "src/"
+        },
+        "files": [
+            "helpers/cache.php",
+            "helpers/console.php",
+            "helpers/so.php"
+        ]
+    },
+    "authors": [
+        {
+            "name": "Ronaldo Matos Rodrigues",
+            "email": "ronaldo@whera.com.br"
+        }
+    ],
+    "minimum-stability": "stable"
+}
