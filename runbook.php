@@ -1,6 +1,10 @@
 <?php declare(strict_types=1);
 
-require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+if(isset($__runBash__) && $__runBash__ === 1) {
+    require dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+} else {
+    require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';    
+}
 
 use Symfony\Component\Yaml\Yaml;
 use Wsw\Runbook\ActionsContainer;
