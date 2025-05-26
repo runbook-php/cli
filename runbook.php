@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-if(isset($__runBash__) && $__runBash__ === 1) {
-    require dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-} else {
-    require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';    
-}
+$dirVendor = (isset($__runBash__) && $__runBash__ === 1)
+    ? dirname(dirname(dirname(__DIR__))) . DIRECTORY_SEPARATOR . 'vendor'
+    : __DIR__ . DIRECTORY_SEPARATOR . 'vendor';
+
+require_once $dirVendor . DIRECTORY_SEPARATOR . 'autoload.php';    
 
 use Symfony\Component\Yaml\Yaml;
 use Wsw\Runbook\ActionsContainer;
@@ -36,7 +36,7 @@ try {
     $payloadString = isset($argv[3]) ? $argv[3] : false;
     $commandsList = ['run', 'clear-cache', 'help'];
 
-    $filePackages = __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR .'composer' . DIRECTORY_SEPARATOR . 'installed.json';
+    $filePackages = $dirVendor . DIRECTORY_SEPARATOR .'composer' . DIRECTORY_SEPARATOR . 'installed.json';
     $hashInstalledPackages = hash_file('sha256', $filePackages);
     $dirCache = getHomeDirectory() . DIRECTORY_SEPARATOR . '.runbook';
     $dirProviderActionsCache = $dirCache . DIRECTORY_SEPARATOR . 'provider_actions.json';
