@@ -192,7 +192,11 @@ class Builder
     {
         if ($param instanceof TaggedValue) {
             $instanceTag = $this->tagParse->getInstance($param->getTag());
-            return $instanceTag->parse($param->getValue());
+            $resolveItem = is_array($param->getValue())
+                ? $this->resolveParam($param->getValue())
+                : $param->getValue();
+
+            return $instanceTag->parse($resolveItem);
         } elseif (is_array($param)) {
             $resolved = [];
             foreach ($param as $key => $value) {
