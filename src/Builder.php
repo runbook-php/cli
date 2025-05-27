@@ -211,9 +211,18 @@ class Builder
     private function resolveWhen(TaggedValue $when, $value): bool 
     {
         $instanceTag = $this->tagParse->getInstance($when->getTag());
+        $fieldValue = $when->getValue();
+        
+        if (is_string($when->getValue()) && preg_match('/^!([A-Za-z0-9_]+)\s+(.*)$/', $when->getValue(), $matches)) {
+            $innerTag = $matches[1];
+            $innerValue = $matches[2];
+            $valueInnerTag = new TaggedValue($innerTag, $innerValue);
+            $fieldValue = $this->resolveParam($valueInnerTag);
+        }
+
         if ($instanceTag instanceof ComparisonOperatorContract) {
             $instanceTag->setValue($value);
         }
-        return $instanceTag->parse($when->getValue());
+        return $instanceTag->parse($fieldValue);
     }
 }
