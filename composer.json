@@ -6,10 +6,12 @@
         "bin/runbook"
     ],
     "require": {
+        "psr/log": "^1.1",
         "symfony/yaml": "^5.4",
+        "league/flysystem": "^2.0",
         "wsw/runbook-contract": "^1.0",
         "wsw/runbook-tagget-parses": "^1.0",
-        "psr/log": "^1.1"
+        "wsw/runbook-vault": "^1.0"
     },
     "license": "MIT",
     "autoload": {
