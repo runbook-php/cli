@@ -37,12 +37,23 @@ class Step
             throw new \InvalidArgumentException('The "ignore_errors" parameter to "'.$id.'" action must be either "yes" or "no". Please correct the value to proceed.');
         }
 
+        if (count($when) > 0 && isset($when[1]) && $when[1] instanceof TaggedValue) {
+            $arrWhen[] = $when;
+        } elseif (
+            (count($when) > 0 && isset($when[1]) && is_array($when[1])) ||
+            (count($when) > 0 && !isset($when[1]) && $when[0][1] instanceof TaggedValue)
+        ) {
+            $arrWhen = $when;
+        } else {
+            $arrWhen = [];
+        }
+
         $this->id = $id;
         $this->description = $description;
         $this->action = $action;
         $this->params = $params;
         $this->outputs = $outputs;
-        $this->when = $when;
+        $this->when = $arrWhen;
         $this->ignoreErrors = $ignoreErrors === 'yes';
         $this->dependsOnSuccess = $dependsOnSuccess;
     }
@@ -110,14 +121,14 @@ class Step
         return count($this->getWhen()) > 0;
     }
 
-    public function getFieldWhen()
+    public function getFieldWhen(int $index = 0)
     {
-        return $this->when[0];
+        return $this->when[$index][0];
     }
 
-    public function getOperatorWhen(): TaggedValue
+    public function getOperatorWhen(int $index = 0): TaggedValue
     {
-        return $this->when[1];
+        return $this->when[$index][1];
     }
 
     public function getDependsOnSuccess(): ?string

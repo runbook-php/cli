@@ -173,8 +173,13 @@ class Builder
 
         $resultWhen = true;
         if ($step->hasWhen()) {
-            $fieldValue = $this->resolveParam($step->getFieldWhen());
-            $resultWhen = $this->resolveWhen($step->getOperatorWhen(), $fieldValue);
+            foreach($step->getWhen() as $index => $itemWhen) {
+                $fieldValue = $this->resolveParam($step->getFieldWhen($index));
+                $resultWhenItem = $this->resolveWhen($step->getOperatorWhen($index), $fieldValue);
+                if ($resultWhenItem === false) {
+                    $resultWhen = false;
+                }
+            }
         }
 
         if ($resultWhen === true) {
