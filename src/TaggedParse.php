@@ -52,7 +52,7 @@ class TaggedParse
         return $this->resourceReference->has($key);
     }
 
-    public function getReference(string $key): bool
+    public function getReference(string $key)
     {
         return $this->resourceReference->get($key);
     }
