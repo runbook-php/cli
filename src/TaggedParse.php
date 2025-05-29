@@ -46,4 +46,14 @@ class TaggedParse
         
         return $this->storage[$tag];
     }
+
+    public function hasReference(string $key): bool
+    {
+        return $this->resourceReference->has($key);
+    }
+
+    public function getReference(string $key): bool
+    {
+        return $this->resourceReference->get($key);
+    }
 }

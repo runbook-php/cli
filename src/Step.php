@@ -3,7 +3,6 @@
 namespace Wsw\Runbook;
 
 use Symfony\Component\Yaml\Tag\TaggedValue;
-use Wsw\Runbook\TaggedParse\ComparisonOperatorInterface;
 
 class Step
 {
@@ -15,6 +14,8 @@ class Step
 
     private $ignoreErrors = false;
 
+    private $dependsOnSuccess = null;
+
     /**
      * @var Output
      */
@@ -22,8 +23,16 @@ class Step
 
     private $when = [];
 
-    public function __construct(string $id, string $description, string $action, array $params = [], array $outputs = [], array $when = [], string $ignoreErrors = 'no')
-    {
+    public function __construct(
+        string $id, 
+        string $description, 
+        string $action, 
+        array $params = [], 
+        array $outputs = [], 
+        array $when = [], 
+        string $ignoreErrors = 'no', 
+        ?string $dependsOnSuccess = null
+    ) {
         if (in_array($ignoreErrors, ['yes', 'no']) === false) {
             throw new \InvalidArgumentException('The "ignore_errors" parameter to "'.$id.'" action must be either "yes" or "no". Please correct the value to proceed.');
         }
@@ -35,6 +44,7 @@ class Step
         $this->outputs = $outputs;
         $this->when = $when;
         $this->ignoreErrors = $ignoreErrors === 'yes';
+        $this->dependsOnSuccess = $dependsOnSuccess;
     }
 
     public function addParam(string $key, $value): self
@@ -108,5 +118,15 @@ class Step
     public function getOperatorWhen(): TaggedValue
     {
         return $this->when[1];
+    }
+
+    public function getDependsOnSuccess(): ?string
+    {
+        return $this->dependsOnSuccess;
+    }
+
+    public function hasDependencyOnSuccess(): bool
+    {
+        return !is_null($this->dependsOnSuccess);
     }
 }

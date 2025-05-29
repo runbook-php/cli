@@ -120,6 +120,7 @@ class Builder
             $stepOutputs = $step['outputs'] ?? [];
             $stepWhen    = $step['when'] ?? [];
             $ignoreErrors = isset($step['ignore_errors']) ? mb_strtolower($step['ignore_errors']) : 'no';
+            $dependsOnSuccess = isset($step['depends_on_success']) ? $step['depends_on_success'] : null;
     
             $stepEntiry = new Step($stepId, $stepDescription, $stepAction, [], $stepOutputs, $stepWhen, $ignoreErrors);
             foreach ($stepParams as $paramKey => $paramValue) {
@@ -149,6 +150,20 @@ class Builder
 
     public function executeStep(Step &$step)
     {
+        if ($step->hasDependencyOnSuccess()) {
+            $dependsSuccess = true;
+            $actionDependency = $step->getDependsOnSuccess();
+            $keyReferenceDepends = 'steps.' . $actionDependency . '.rc';
+
+            if ($this->tagParse->hasReference($keyReferenceDepends) === false || $this->tagParse->getReference($keyReferenceDepends) !== OutputContract::SUCCESS) {
+                $dependsSuccess = false;
+            }
+
+            if ($dependsSuccess === false) {
+                throw new \RuntimeException('Execution of action "'.$step->getId().'" was halted: it depends on the success of action "'.$actionDependency.'", which did not complete successfully.');
+            }
+        }
+        
         $instanceAction = $this->container->get($step->getAction());
         $arrParam = [];
         
@@ -168,7 +183,6 @@ class Builder
             $output = new Output;
             $output->skip();
         }
-
 
         $step->setResult($output);
         $this->tagParse->addReference('steps.'.$step->getId().'.rc', $output->getExitCode());
