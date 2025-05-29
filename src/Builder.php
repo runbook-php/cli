@@ -122,7 +122,7 @@ class Builder
             $ignoreErrors = isset($step['ignore_errors']) ? mb_strtolower($step['ignore_errors']) : 'no';
             $dependsOnSuccess = isset($step['depends_on_success']) ? $step['depends_on_success'] : null;
     
-            $stepEntiry = new Step($stepId, $stepDescription, $stepAction, [], $stepOutputs, $stepWhen, $ignoreErrors);
+            $stepEntiry = new Step($stepId, $stepDescription, $stepAction, [], $stepOutputs, $stepWhen, $ignoreErrors, $dependsOnSuccess);
             foreach ($stepParams as $paramKey => $paramValue) {
                 $stepEntiry->addParam($paramKey, $paramValue);
             }
@@ -163,7 +163,7 @@ class Builder
                 throw new \RuntimeException('Execution of action "'.$step->getId().'" was halted: it depends on the success of action "'.$actionDependency.'", which did not complete successfully.');
             }
         }
-        
+
         $instanceAction = $this->container->get($step->getAction());
         $arrParam = [];
         
