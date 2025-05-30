@@ -239,6 +239,13 @@ try {
 
     if ($renewCacheActions === true || $renewCacheTaggedParse === true) {
         $installedPackages = json_decode(file_get_contents($filePackages), true);
+        $localComposer = dirname($dirVendor) . DIRECTORY_SEPARATOR . 'composer.json';
+        if (file_exists($localComposer)) {
+            $composerArray = json_decode(file_get_contents($localComposer), true);
+            if (is_array($composerArray)) {
+                $installedPackages['packages'][] = $composerArray;
+            }
+        }
 
         foreach ($installedPackages['packages'] as $package) {
             if (isset($package['extra']['runbook']['actions']) && count($package['extra']['runbook']['actions']) > 0) {
