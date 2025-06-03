@@ -41,7 +41,8 @@ try {
 
     $filePackages = $dirVendor . DIRECTORY_SEPARATOR .'composer' . DIRECTORY_SEPARATOR . 'installed.json';
     $hashInstalledPackages = hash_file('sha256', $filePackages);
-    $dirCache = getHomeDirectory() . DIRECTORY_SEPARATOR . '.runbook';
+    $dirConfig = getHomeDirectory() . DIRECTORY_SEPARATOR . '.runbook';
+    $dirCache = dirname($dirVendor) . DIRECTORY_SEPARATOR . '.cache';
     $dirSecret = dirname($dirVendor) . DIRECTORY_SEPARATOR . '.secret';
     $dirProviderActionsCache = $dirCache . DIRECTORY_SEPARATOR . 'provider_actions.json';
     $dirProviderTaggedParseCache = $dirCache . DIRECTORY_SEPARATOR . 'provider_tagged_parse.json';
@@ -51,8 +52,9 @@ try {
     $providersTaggedParse = [];
     
 
-    $fileSystemConfig = new League\Flysystem\Filesystem(new League\Flysystem\Local\LocalFilesystemAdapter($dirCache));
+    $fileSystemConfig = new League\Flysystem\Filesystem(new League\Flysystem\Local\LocalFilesystemAdapter($dirConfig));
     $fileSystemSecret = new League\Flysystem\Filesystem(new League\Flysystem\Local\LocalFilesystemAdapter($dirSecret));
+    $fileSystemCache  = new League\Flysystem\Filesystem(new League\Flysystem\Local\LocalFilesystemAdapter($dirCache));
     $fileConfigVault = 'vault.json';
     $existVaultKey = false;
 
